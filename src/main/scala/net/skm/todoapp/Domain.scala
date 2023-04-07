@@ -1,4 +1,4 @@
-package net.skm
+package net.skm.todoapp
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter

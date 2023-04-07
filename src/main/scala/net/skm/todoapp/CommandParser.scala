@@ -1,13 +1,13 @@
-package net.skm
+package net.skm.todoapp
 
-import net.skm.Main.todos
+import net.skm.todoapp.Domain._
+import net.skm.todoapp.Main.todos
 
 import java.util.UUID
 import scala.annotation.tailrec
+import scala.collection.mutable
 import scala.io.StdIn
 import scala.util.{Failure, Success, Try}
-import Domain._
-import scala.collection.mutable
 
 object CommandParser {
 

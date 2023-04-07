@@ -1,7 +1,7 @@
-package net.skm
+package net.skm.todoapp
 
-import net.skm.CommandParser._
-import net.skm.Domain.Task
+import net.skm.todoapp.CommandParser._
+import net.skm.todoapp.Domain.Task
 
 import java.util.UUID
 import scala.collection.mutable
