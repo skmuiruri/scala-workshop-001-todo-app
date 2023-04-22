@@ -1,5 +1,7 @@
 package net.skm.lessons
 
+import scala.util.{Failure, Success, Try}
+
 /*
 
      (                                         *
@@ -11,12 +13,11 @@ package net.skm.lessons
     |  _// _` ||  _||  _|/ -_) | '_|| ' \)) | |\/| |/ _` || '_|/ _| | ' \ | || ' \))/ _` |
     |_|  \__,_| \__| \__|\___| |_|  |_||_|  |_|  |_|\__,_||_|  \__| |_||_||_||_||_| \__, |
                                                                                     |___/
-                                        ,'.-.'.
-                                        '\~ o/` ,,
-                                         { @ } f
-                                         /`-'\$
-                                        (_/-\_)
-
+/*
+  ==============
+    SESSION I
+  ==============
+ */
 */
 object UnderstandingPatternMatching extends App {
 
@@ -30,17 +31,18 @@ object UnderstandingPatternMatching extends App {
   val ordineErnesto =
     Ordinazione("ernesto", "23435454", "riso", "risotto", "acqua", "in elaborazione", "02/02/2023")
   val ordineKevin =
-    Ordinazione("kevin","2124245", "carne", "carne", "pepsi", "erogato", "03/04/2023")
+    Ordinazione("kevin", "2124245", "carne", "carne", "pepsi", "erogato", "03/04/2023")
 
   def stampaOrdine(ordine: Ordinazione) = {
-    if(ordine.tipoCibo == "pizza")
+    if (ordine.tipoCibo == "pizza")
       println(ordine.nomeCliente + " ha ordinato la pizza, " + ordine.descCibo)
-    else if(ordine.tipoCibo == "pasta")
+    else if (ordine.tipoCibo == "pasta")
       println(ordine.nomeCliente + " ha ordinato la pasta, " + ordine.descCibo)
-    else if(ordine.tipoCibo == "riso")
+    else if (ordine.tipoCibo == "riso")
       println(ordine.nomeCliente + " ha ordinato il riso, " + ordine.descCibo)
     else println("il tipo cibo " + ordine.tipoCibo + " ordinato da " + ordine.nomeCliente + " non previsto")
   }
+
   // constructor pattern
   def stampaOrdine2(ordine: Ordinazione) = {
     ordine match {
@@ -55,6 +57,60 @@ object UnderstandingPatternMatching extends App {
     }
   }
 
-  stampaOrdine2(ordineFabio)
+  //stampaOrdine2(ordineFabio)
+  // ....
+  /*
+    ==============
+      SESSION II
+    ==============
+   */
+
+  Villaggio("fabio's village")
+    .creaEsercito()
+    .flatMap(_.attack)
+    .flatMap(_.schiavizzare)
+    .flatMap(_.lavora)
+
+  // for-comprehension
+  for {
+    villaggio    <- Right(Villaggio("villaggio di Fabio"))
+    esercito     <- villaggio.creaEsercito()
+    popolazione  <- esercito.attack
+    ps           <- popolazione.schiavizzare
+    stato        <- ps.lavora
+  } yield stato
+
+  case class Villaggio(name: String) {
+    def creaEsercito(): Either[Exception, Esercito] = Right(Esercito("esercito di Fabio"))
+  }
+
+  case class AttackingWithoutAnArmy() extends Exception
+
+  val success: Either[AttackingWithoutAnArmy, String] = Right("successo")
+  val failure: Either[Exception, String] = Left(new Exception("errore"))
+
+  def fun: Try[String] = Success("successo")
+  def fun2: Try[String] = Failure(new Exception("failed"))
+
+  // Either, Try, Option
+  // Monad
+  // Some(esercito), None
+  def getEsercito: Option[Esercito] = None
+
+  def attackNeighbour(esercito: Esercito) = esercito.attack
+
+  case class Esercito(name: String) {
+    def attack: Either[Exception, Popolazione] = Right(Popolazione("popolazione sconfitto"))
+  }
+
+  case class Popolazione(name: String) {
+    def schiavizzare:Either[Exception, PopoloSottoMesso] = Right(PopoloSottoMesso())
+  }
+
+  case class PopoloSottoMesso() {
+    def lavora: Either[Exception, String] = Right("poppo sottomesso sta lavorando")
+  }
+
+
 
 }
